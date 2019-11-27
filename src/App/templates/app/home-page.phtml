@@ -1,7 +1,58 @@
-<?php $this->headTitle('Home'); ?>
+<?php $this->headTitle('Chat'); ?>
 
-<a href="/chat">
-    <div class="jumbotron">
-        <h1>Enter Chat</h1>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<div class="row">
+    <div class="col-md-2">
     </div>
-</a>
+    <div class="col-md-8">
+
+        <div id="connection-status" style="min-height:110px;">
+            <div class="alert-warning" style="padding:20px;display:none;">Disconnected</div>
+            <div class="alert-primary" style="padding:20px;display:none;">Connected</div>
+        </div>
+
+        <input id="username" name="username" class="form-control" style="width:30%;" placeholder="Username">
+        <br><br>
+
+        <p>Chat Box</p>
+        <div id="chatbox" style="background-color:pink; width:100%; min-height:100px;">
+
+        </div>
+
+        <br><br>
+
+        <label for="message">Message: </label>
+        <input id="message" type="text" class="form-control">
+
+        <br>
+
+        <button class="btn btn-primary float-right">Send</button>
+    </div>
+</div>
+
+<script>
+    $('document').ready(function(){
+        // Then some JavaScript in the browser:
+        var conn = new WebSocket('ws://localhost:8081/chat');
+
+        conn.onopen = function(e) { $('.alert-primary').show(); $('.alert-warning').hide(); };
+
+        conn.onclose = function(e) { $('.alert-primary').hide(); $('.alert-warning').show(); };
+
+        conn.onmessage = function(e) {
+            let object = JSON.parse(e.data);
+            $('#chatbox').append('<p style=padding:5px;>'+object.name+': '+object.message+'</p>');
+        };
+
+        $('.btn.btn-primary').click(function(){
+            let username = $('#username').val(),
+                message = $('#message').val()
+
+            conn.send('{"name":"'+username+'", "message":"'+message+'"}');
+
+            $('#message').val('');
+        });
+
+    })
+</script>
