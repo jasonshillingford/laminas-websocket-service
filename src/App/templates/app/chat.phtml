@@ -35,7 +35,7 @@
 <script>
     $('document').ready(function(){
         // Then some JavaScript in the browser:
-        var conn = new WebSocket('ws://localhost:8081/chat');
+        var conn = new WebSocket('ws://178.128.38.29:8081/chat');
 
         conn.onopen = function(e) { $('.alert-primary').show(); $('.alert-warning').hide(); };
 

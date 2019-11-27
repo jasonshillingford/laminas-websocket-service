@@ -43,6 +43,6 @@ class MyChat implements MessageComponentInterface
 }
 
 // Run the server application through the WebSocket protocol on port 8081
-$app = new Ratchet\App('localhost', 8081);
+$app = new Ratchet\App('178.128.38.29', 8081);
 $app->route('/chat', new MyChat, array('*'));
 $app->run();
